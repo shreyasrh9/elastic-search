@@ -93,17 +93,17 @@ curl </span><span class="str">'localhost:9200/_cat/indices?v'</span></pre></li>
   </li>
   
   <li>The update API allows to update a document based on a script provided:<br>
-  		<code>UpdateRequest updateRequest = new UpdateRequest();
-		updateRequest.index("bank").type("accounts").id(id)
-				.doc(jsonBuilder().startObject().field("balance", "10000").endObject());
-		try {
-			UpdateResponse updateResponse = client.update(updateRequest).get();
-			System.out.println(updateResponse.status());
-			return updateResponse.status().toString();
-		} catch (InterruptedException | ExecutionException e) {
-			logger.error("Error :"+e.getMessage());
-		}
-  		</code>
+  		<pre  style="font-family:arial;font-size:12px;border:1px dashed #CCCCCC;width:99%;height:auto;overflow:auto;background:#f0f0f0;;background-image:URL(http://2.bp.blogspot.com/_z5ltvMQPaa8/SjJXr_U2YBI/AAAAAAAAAAM/46OqEP32CJ8/s320/codebg.gif);padding:0px;color:#000000;text-align:left;line-height:20px;"><code style="color:#000000;word-wrap:normal;">           UpdateRequest updateRequest = new UpdateRequest();  
+           updateRequest.index("bank").type("accounts").id(id)  
+                     .doc(jsonBuilder().startObject().field("balance", "10000").endObject());  
+           try {  
+                UpdateResponse updateResponse = client.update(updateRequest).get();  
+                System.out.println(updateResponse.status());  
+                return updateResponse.status().toString();  
+           } catch (InterruptedException | ExecutionException e) {  
+                logger.error("Error :"+e.getMessage());  
+           }  
+</code></pre>
   </li>
   
   
