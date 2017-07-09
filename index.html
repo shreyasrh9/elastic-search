@@ -51,38 +51,41 @@ client</span><span class="pun">.</span><span class="pln">close</span><span class
   <pre class="programlisting prettyprint lang-sh prettyprinted"><span class="pln">curl </span><span class="pun">-</span><span class="pln">XPOST </span><span class="str">'localhost:9200/bank/account/_bulk?pretty'</span><span class="pln"> </span><span class="pun">--</span><span class="pln">data</span><span class="pun">-</span><span class="pln">binary </span><span class="lit">@accounts</span><span class="pun">.</span><span class="pln">json
 curl </span><span class="str">'localhost:9200/_cat/indices?v'</span></pre></li>
   <li>If you want to import the JSON through java client, you can use the below code.<br>
-  	<code>JSONParser parser = new JSONParser();
-		IndexResponse indexResponse = null;
-		try {
+	  
+	  
+	  
+  	<code>JSONParser parser = new JSONParser();<br>
+		IndexResponse indexResponse = null;<br>
+		try {<br>
 
-			Object obj = parser.parse(new FileReader("/Users/shreyasrh/Desktop/test.json"));
-			for (int i = 0; i < ((JSONArray) obj).size(); i++) {
-				JSONObject jsonObject = (JSONObject) ((JSONArray) obj).get(i);
+			Object obj = parser.parse(new FileReader("/Users/shreyasrh/Desktop/test.json"));<br>
+			for (int i = 0; i < ((JSONArray) obj).size(); i++) {<br>
+				JSONObject jsonObject = (JSONObject) ((JSONArray) obj).get(i);<br>
 
-				indexResponse = client.prepareIndex("bank", "accounts", Integer.toString(i + 1))
-						.setSource(jsonObject.toJSONString()).get();
-				System.out.println(jsonObject);
+				indexResponse = client.prepareIndex("bank", "accounts", Integer.toString(i + 1))<br>
+						.setSource(jsonObject.toJSONString()).get();<br>
+				System.out.println(jsonObject);<br>
 
-				System.out.println("Index name :" + indexResponse.getIndex());
+				System.out.println("Index name :" + indexResponse.getIndex());<br>
 
-				System.out.println("Type Name :" + indexResponse.getType());
+				System.out.println("Type Name :" + indexResponse.getType());<br>
 
-				System.out.println("Document ID (generated or not) :" + indexResponse.getId());
+				System.out.println("Document ID (generated or not) :" + indexResponse.getId());<br>
 
-				System.out.println("Version (if it's the first time you index this document, you will get: 1) :"
-						+ indexResponse.getVersion());
+				System.out.println("Version (if it's the first time you index this document, you will get: 1) :"<br>
+						+ indexResponse.getVersion());<br>
 
-				System.out.println("Status has stored current instance statement :" + indexResponse.status());
+				System.out.println("Status has stored current instance statement :" + indexResponse.status());<br>
 
-			}
+			}<br>
 
-		} catch (FileNotFoundException e) {
-			logger.error("Error :"+e.getMessage());
-		} catch (IOException e) {
-			logger.error("Error :"+e.getMessage());
-		} catch (Exception e) {
-			logger.error("Error :"+e.getMessage());
-		}</code>
+		} catch (FileNotFoundException e) {<br>
+			logger.error("Error :"+e.getMessage());<br>
+		} catch (IOException e) {<br>
+			logger.error("Error :"+e.getMessage());<br>
+		} catch (Exception e) {<br>
+			logger.error("Error :"+e.getMessage());<br>
+		}<br></code>
   </li>
   <li>The get API allows to get a typed JSON document from the index based on its id. The following example gets a JSON document from an index called twitter, under a type called tweet, with id valued 1:<br>
   		<code>GetResponse response = client.prepareGet("bank", "accounts", "1").get();
