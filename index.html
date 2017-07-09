@@ -3,33 +3,109 @@ layout: default
 title: Home
 ---
 
-<p><ul>
-  <li>Before starting anything, please sign up for Sentry and login.</li>
-  <li>After logging in, this is how your screen will look like.</li><br>
-  <div class="img">
-    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158278/Screen_Shot_2017-07-04_at_1.29.14_PM_aj3mwa.png" />
-</div><br>
-  <li>Click on <b>New Project</b> and create the project.</li><br>
-  <div class="img">
-    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158343/Screen_Shot_2017-07-04_at_1.32.01_PM_ghppij.png" />
-</div><br>
-  <li>Click on get your dsn and you will get your dsn and make a note of it.</li><br>
-  <div class="img">
-    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158389/Screen_Shot_2017-07-04_at_1.33.31_PM_dsyz0s.png" />
-</div><br>
-  <li>And that's it, you have got your dsn and you need to paste this dsn in your log4j.properties file.<br>
-	<code>log4j.appender.SentryAppender.dsn= Your DSN here</code></li>
-  <li>After executing this application you will recieve an email similar to this.<br>
-  <div class="img">
-    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158433/Screen_Shot_2017-07-04_at_1.38.47_PM_yqhiyc.png" />
-</div><br>
+<p>This section describes the Java API that elasticsearch provides. All elasticsearch operations are executed using a Client object. All operations are completely asynchronous in nature (either accepts a listener, or returns a future).
+
+Additionally, operations on a client may be accumulated and executed in Bulk.
+
+Note, all the APIs are exposed through the Java API (actually, the Java API is used internally to execute them).
+
+This is just a basics covering basic CRUD operations on elastic search. I'll be writing more about elastic search in the near future.
+
+<ul>
+  <li>Elasticsearch is hosted on Maven Central. You can define the latest version in your pom.xml file: <br>
+  <code><dependency>
+    <groupId>org.elasticsearch.client</groupId>
+    <artifactId>transport</artifactId>
+    <version>5.5.0</version>
+</dependency></code>
   </li>
-  <li>Additionally you can handle and track the reported error. Sentry provides several options like STATUS, HAS TAG, ASSIGNED TO, BOOKMARKED BY, APPLICATION etc.
+  <li>You need to also include Log4j 2 dependencies:<br>
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.8.2</version>
+</dependency>
+</li><br>
+  
+  <li>The TransportClient connects remotely to an Elasticsearch cluster using the transport module. It does not join the cluster, but simply gets one or more initial transport addresses and communicates with them in round robin fashion on each action (though most actions will probably be "two hop" operations).<br>
+  	
+	<code>TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
+        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("host1"), 9300))
+        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("host2"), 9300));
+
+	client.close();</code>
+  </li>
+  <br>
+  <li>Note that you have to set the cluster name if you use one different than "elasticsearch":<br>
+  	<code>Settings settings = Settings.builder()
+        .put("cluster.name", "myClusterName").build();
+		TransportClient client = new PreBuiltTransportClient(settings);</code>
   </li><br>
   
-  <div class="img">
-    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158465/Screen_Shot_2017-07-04_at_2.19.29_PM_bvwtx8.png" />
-</div><br>
+  <li>The index API allows one to index a typed JSON document into a specific index and make it searchable. I have kept a accounts json in the project and you can import the JSON file using<br>
+  <code>curl -XPOST 'localhost:9200/bank/account/_bulk?pretty' --data-binary @accounts.json //To import JSON
+curl 'localhost:9200/_cat/indices?v'  //To check if the import is reflecting</code></li>
+  <li>If you want to import the JSON through java client, you can use the below code.<br>
+  	<code>JSONParser parser = new JSONParser();
+		IndexResponse indexResponse = null;
+		try {
+
+			Object obj = parser.parse(new FileReader("/Users/shreyasrh/Desktop/test.json"));
+			for (int i = 0; i < ((JSONArray) obj).size(); i++) {
+				JSONObject jsonObject = (JSONObject) ((JSONArray) obj).get(i);
+
+				indexResponse = client.prepareIndex("bank", "accounts", Integer.toString(i + 1))
+						.setSource(jsonObject.toJSONString()).get();
+				System.out.println(jsonObject);
+
+				System.out.println("Index name :" + indexResponse.getIndex());
+
+				System.out.println("Type Name :" + indexResponse.getType());
+
+				System.out.println("Document ID (generated or not) :" + indexResponse.getId());
+
+				System.out.println("Version (if it's the first time you index this document, you will get: 1) :"
+						+ indexResponse.getVersion());
+
+				System.out.println("Status has stored current instance statement :" + indexResponse.status());
+
+			}
+
+		} catch (FileNotFoundException e) {
+			logger.error("Error :"+e.getMessage());
+		} catch (IOException e) {
+			logger.error("Error :"+e.getMessage());
+		} catch (Exception e) {
+			logger.error("Error :"+e.getMessage());
+		}</code>
+  </li>
+  <li>The get API allows to get a typed JSON document from the index based on its id. The following example gets a JSON document from an index called twitter, under a type called tweet, with id valued 1:<br>
+  		<code>GetResponse response = client.prepareGet("bank", "accounts", "1").get();
+  		</code>
+  </li>
+  
+  <li>The delete API allows one to delete a typed JSON document from a specific index based on its id. The following example deletes the JSON document from an index called twitter, under a type called tweet, with id valued 1:
+<br>
+  		<code>DeleteResponse response = client.prepareDelete("bank", "accounts", "1").get();
+
+  		</code>
+  </li>
+  
+  <li>The update API allows to update a document based on a script provided:<br>
+  		<code>UpdateRequest updateRequest = new UpdateRequest();
+		updateRequest.index("bank").type("accounts").id(id)
+				.doc(jsonBuilder().startObject().field("balance", "10000").endObject());
+		try {
+			UpdateResponse updateResponse = client.update(updateRequest).get();
+			System.out.println(updateResponse.status());
+			return updateResponse.status().toString();
+		} catch (InterruptedException | ExecutionException e) {
+			logger.error("Error :"+e.getMessage());
+		}
+  		</code>
+  </li>
+  
+  
   </ul>
   </p>
   
