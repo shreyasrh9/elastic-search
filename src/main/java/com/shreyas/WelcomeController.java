@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.log4j.Logger;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/rest/elastic")
 public class WelcomeController {
-
+	final static Logger logger = Logger.getLogger(WelcomeController.class);
 	TransportClient client;
 
 	public WelcomeController() throws UnknownHostException {
@@ -68,11 +69,11 @@ public class WelcomeController {
 			}
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("Error :"+e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Error :"+e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error :"+e.getMessage());
 		}
 		return indexResponse.getResult().toString();
 	}
@@ -87,7 +88,7 @@ public class WelcomeController {
 		}
 
 		catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error :"+e.getMessage());
 		}
 		return getResponse.getSource();
 	}
@@ -103,7 +104,7 @@ public class WelcomeController {
 			System.out.println(updateResponse.status());
 			return updateResponse.status().toString();
 		} catch (InterruptedException | ExecutionException e) {
-			System.out.println(e);
+			logger.error("Error :"+e.getMessage());
 		}
 		return "Exception";
 	}
