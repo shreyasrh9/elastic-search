@@ -54,38 +54,31 @@ curl </span><span class="str">'localhost:9200/_cat/indices?v'</span></pre></li>
 	  
 	  
 	  
-  	<code>JSONParser parser = new JSONParser();<br>
-		IndexResponse indexResponse = null;<br>
-		try {<br>
-
-			Object obj = parser.parse(new FileReader("/Users/shreyasrh/Desktop/test.json"));<br>
-			for (int i = 0; i < ((JSONArray) obj).size(); i++) {<br>
-				JSONObject jsonObject = (JSONObject) ((JSONArray) obj).get(i);<br>
-
-				indexResponse = client.prepareIndex("bank", "accounts", Integer.toString(i + 1))<br>
-						.setSource(jsonObject.toJSONString()).get();<br>
-				System.out.println(jsonObject);<br>
-
-				System.out.println("Index name :" + indexResponse.getIndex());<br>
-
-				System.out.println("Type Name :" + indexResponse.getType());<br>
-
-				System.out.println("Document ID (generated or not) :" + indexResponse.getId());<br>
-
-				System.out.println("Version (if it's the first time you index this document, you will get: 1) :"<br>
-						+ indexResponse.getVersion());<br>
-
-				System.out.println("Status has stored current instance statement :" + indexResponse.status());<br>
-
-			}<br>
-
-		} catch (FileNotFoundException e) {<br>
-			logger.error("Error :"+e.getMessage());<br>
-		} catch (IOException e) {<br>
-			logger.error("Error :"+e.getMessage());<br>
-		} catch (Exception e) {<br>
-			logger.error("Error :"+e.getMessage());<br>
-		}<br></code>
+  	<pre  style="font-family:arial;font-size:12px;border:1px dashed #CCCCCC;width:99%;height:auto;overflow:auto;background:#f0f0f0;;background-image:URL(http://2.bp.blogspot.com/_z5ltvMQPaa8/SjJXr_U2YBI/AAAAAAAAAAM/46OqEP32CJ8/s320/codebg.gif);padding:0px;color:#000000;text-align:left;line-height:20px;"><code style="color:#000000;word-wrap:normal;">           JSONParser parser = new JSONParser();  
+           IndexResponse indexResponse = null;  
+           try {  
+                Object obj = parser.parse(new FileReader("/Users/shreyasrh/Desktop/test.json"));  
+                for (int i = 0; i &lt; ((JSONArray) obj).size(); i++) {  
+                     JSONObject jsonObject = (JSONObject) ((JSONArray) obj).get(i);  
+                     indexResponse = client.prepareIndex("bank", "accounts", Integer.toString(i + 1))  
+                               .setSource(jsonObject.toJSONString()).get();  
+                     System.out.println(jsonObject);  
+                     System.out.println("Index name :" + indexResponse.getIndex());  
+                     System.out.println("Type Name :" + indexResponse.getType());  
+                     System.out.println("Document ID (generated or not) :" + indexResponse.getId());  
+                     System.out.println("Version (if it's the first time you index this document, you will get: 1) :"  
+                               + indexResponse.getVersion());  
+                     System.out.println("Status has stored current instance statement :" + indexResponse.status());  
+                }  
+           } catch (FileNotFoundException e) {  
+                logger.error("Error :"+e.getMessage());  
+           } catch (IOException e) {  
+                logger.error("Error :"+e.getMessage());  
+           } catch (Exception e) {  
+                logger.error("Error :"+e.getMessage());  
+           }  
+           return indexResponse.getResult().toString();  
+</code></pre>
   </li>
   <li>The get API allows to get a typed JSON document from the index based on its id. The following example gets a JSON document from an index called twitter, under a type called tweet, with id valued 1:<br>
   		<code>GetResponse response = client.prepareGet("bank", "accounts", "1").get();
