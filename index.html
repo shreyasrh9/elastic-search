@@ -1,0 +1,56 @@
+---
+layout: default
+title: Home
+---
+
+<p><ul>
+  <li>Before starting anything, please sign up for Sentry and login.</li>
+  <li>After logging in, this is how your screen will look like.</li><br>
+  <div class="img">
+    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158278/Screen_Shot_2017-07-04_at_1.29.14_PM_aj3mwa.png" />
+</div><br>
+  <li>Click on <b>New Project</b> and create the project.</li><br>
+  <div class="img">
+    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158343/Screen_Shot_2017-07-04_at_1.32.01_PM_ghppij.png" />
+</div><br>
+  <li>Click on get your dsn and you will get your dsn and make a note of it.</li><br>
+  <div class="img">
+    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158389/Screen_Shot_2017-07-04_at_1.33.31_PM_dsyz0s.png" />
+</div><br>
+  <li>And that's it, you have got your dsn and you need to paste this dsn in your log4j.properties file.<br>
+	<code>log4j.appender.SentryAppender.dsn= Your DSN here</code></li>
+  <li>After executing this application you will recieve an email similar to this.<br>
+  <div class="img">
+    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158433/Screen_Shot_2017-07-04_at_1.38.47_PM_yqhiyc.png" />
+</div><br>
+  </li>
+  <li>Additionally you can handle and track the reported error. Sentry provides several options like STATUS, HAS TAG, ASSIGNED TO, BOOKMARKED BY, APPLICATION etc.
+  </li><br>
+  
+  <div class="img">
+    <img src="http://res.cloudinary.com/shreyas/image/upload/v1499158465/Screen_Shot_2017-07-04_at_2.19.29_PM_bvwtx8.png" />
+</div><br>
+  </ul>
+  </p>
+  
+
+<div id="disqus_thread"></div>
+<script>
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://shreyasrh9-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
