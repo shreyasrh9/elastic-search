@@ -54,7 +54,7 @@ curl </span><span class="str">'localhost:9200/_cat/indices?v'</span></pre></li>
 	  
 	  
 	  
-  	<pre  style="font-family:arial;font-size:12px;border:1px dashed #CCCCCC;width:99%;height:auto;overflow:auto;padding:0px;text-align:left;line-height:20px;"><code style="color:#000000;word-wrap:normal;">           JSONParser parser = new JSONParser();  
+  	<pre  style="font-family:arial;font-size:12px;border:1px dashed #CCCCCC;width:99%;height:auto;overflow:auto;padding:0px;text-align:left;line-height:20px;"><code style="word-wrap:normal;">           JSONParser parser = new JSONParser();  
            IndexResponse indexResponse = null;  
            try {  
                 Object obj = parser.parse(new FileReader("/Users/shreyasrh/Desktop/test.json"));  
@@ -93,7 +93,7 @@ curl </span><span class="str">'localhost:9200/_cat/indices?v'</span></pre></li>
   </li>
   
   <li>The update API allows to update a document based on a script provided:<br>
-  		<pre  style="font-family:arial;font-size:12px;border:1px dashed #CCCCCC;width:99%;height:auto;overflow:auto;padding:0px;text-align:left;line-height:20px;"><code style="color:#000000;word-wrap:normal;">           UpdateRequest updateRequest = new UpdateRequest();  
+  		<pre  style="font-family:arial;font-size:12px;border:1px dashed #CCCCCC;width:99%;height:auto;overflow:auto;padding:0px;text-align:left;line-height:20px;"><code style="word-wrap:normal;">           UpdateRequest updateRequest = new UpdateRequest();  
            updateRequest.index("bank").type("accounts").id(id)  
                      .doc(jsonBuilder().startObject().field("balance", "10000").endObject());  
            try {  
