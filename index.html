@@ -13,11 +13,11 @@ This is just a basics covering basic CRUD operations on elastic search. I'll be 
 
 <ul>
   <li>Elasticsearch is hosted on Maven Central. You can define the latest version in your pom.xml file: <br>
-  <code><dependency>
-    <groupId>org.elasticsearch.client</groupId>
-    <artifactId>transport</artifactId>
-    <version>5.5.0</version>
-</dependency></code>
+  <pre class="programlisting prettyprint lang-xml prettyprinted"><span class="tag">&lt;dependency&gt;</span><span class="pln">
+    </span><span class="tag">&lt;groupId&gt;</span><span class="pln">org.elasticsearch.client</span><span class="tag">&lt;/groupId&gt;</span><span class="pln">
+    </span><span class="tag">&lt;artifactId&gt;</span><span class="pln">transport</span><span class="tag">&lt;/artifactId&gt;</span><span class="pln">
+    </span><span class="tag">&lt;version&gt;</span><span class="pln">5.5.0</span><span class="tag">&lt;/version&gt;</span><span class="pln">
+</span><span class="tag">&lt;/dependency&gt;</span></pre>
   </li>
   <li>You need to also include Log4j 2 dependencies:<br>
 <dependency>
@@ -29,7 +29,7 @@ This is just a basics covering basic CRUD operations on elastic search. I'll be 
   
   <li>The TransportClient connects remotely to an Elasticsearch cluster using the transport module. It does not join the cluster, but simply gets one or more initial transport addresses and communicates with them in round robin fashion on each action (though most actions will probably be "two hop" operations).<br>
   	
-	<code>TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
+	<code>TransportClient client = new PreBuiltTransportClient(Settings.EMPTY) 
         .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("host1"), 9300))
         .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("host2"), 9300));
 
