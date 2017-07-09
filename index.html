@@ -20,31 +20,36 @@ This is just a basics covering basic CRUD operations on elastic search. I'll be 
 </span><span class="tag">&lt;/dependency&gt;</span></pre>
   </li>
   <li>You need to also include Log4j 2 dependencies:<br>
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-core</artifactId>
-    <version>2.8.2</version>
-</dependency>
+<pre class="programlisting prettyprint lang-xml prettyprinted"><span class="tag">&lt;dependency&gt;</span><span class="pln">
+    </span><span class="tag">&lt;groupId&gt;</span><span class="pln">org.apache.logging.log4j</span><span class="tag">&lt;/groupId&gt;</span><span class="pln">
+    </span><span class="tag">&lt;artifactId&gt;</span><span class="pln">log4j-core</span><span class="tag">&lt;/artifactId&gt;</span><span class="pln">
+    </span><span class="tag">&lt;version&gt;</span><span class="pln">2.8.2</span><span class="tag">&lt;/version&gt;</span><span class="pln">
+</span><span class="tag">&lt;/dependency&gt;</span></pre>
 </li><br>
   
   <li>The TransportClient connects remotely to an Elasticsearch cluster using the transport module. It does not join the cluster, but simply gets one or more initial transport addresses and communicates with them in round robin fashion on each action (though most actions will probably be "two hop" operations).<br>
   	
-	<code>TransportClient client = new PreBuiltTransportClient(Settings.EMPTY) 
-        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("host1"), 9300))
-        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("host2"), 9300));
+	<pre class="programlisting prettyprint lang-java prettyprinted"><span class="com">// on startup</span><span class="pln">
 
-	client.close();</code>
+</span><span class="typ">TransportClient</span><span class="pln"> client </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">PreBuiltTransportClient</span><span class="pun">(</span><span class="typ">Settings</span><span class="pun">.</span><span class="pln">EMPTY</span><span class="pun">)</span><span class="pln">
+        </span><span class="pun">.</span><span class="pln">addTransportAddress</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InetSocketTransportAddress</span><span class="pun">(</span><span class="typ">InetAddress</span><span class="pun">.</span><span class="pln">getByName</span><span class="pun">(</span><span class="str">"host1"</span><span class="pun">),</span><span class="pln"> </span><span class="lit">9300</span><span class="pun">))</span><span class="pln">
+        </span><span class="pun">.</span><span class="pln">addTransportAddress</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">InetSocketTransportAddress</span><span class="pun">(</span><span class="typ">InetAddress</span><span class="pun">.</span><span class="pln">getByName</span><span class="pun">(</span><span class="str">"host2"</span><span class="pun">),</span><span class="pln"> </span><span class="lit">9300</span><span class="pun">));</span><span class="pln">
+
+</span><span class="com">// on shutdown</span><span class="pln">
+
+client</span><span class="pun">.</span><span class="pln">close</span><span class="pun">();</span></pre>
   </li>
   <br>
   <li>Note that you have to set the cluster name if you use one different than "elasticsearch":<br>
-  	<code>Settings settings = Settings.builder()
-        .put("cluster.name", "myClusterName").build();
-		TransportClient client = new PreBuiltTransportClient(settings);</code>
+  	<pre class="programlisting prettyprint lang-java prettyprinted"><span class="typ">Settings</span><span class="pln"> settings </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Settings</span><span class="pun">.</span><span class="pln">builder</span><span class="pun">()</span><span class="pln">
+        </span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="str">"cluster.name"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"myClusterName"</span><span class="pun">).</span><span class="pln">build</span><span class="pun">();</span><span class="pln">
+</span><span class="typ">TransportClient</span><span class="pln"> client </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">PreBuiltTransportClient</span><span class="pun">(</span><span class="pln">settings</span><span class="pun">);</span><span class="pln">
+</span><span class="com">//Add transport addresses and do something with the client...</span></pre>
   </li><br>
   
   <li>The index API allows one to index a typed JSON document into a specific index and make it searchable. I have kept a accounts json in the project and you can import the JSON file using<br>
-  <code>curl -XPOST 'localhost:9200/bank/account/_bulk?pretty' --data-binary @accounts.json //To import JSON
-curl 'localhost:9200/_cat/indices?v'  //To check if the import is reflecting</code></li>
+  <pre class="programlisting prettyprint lang-sh prettyprinted"><span class="pln">curl </span><span class="pun">-</span><span class="pln">XPOST </span><span class="str">'localhost:9200/bank/account/_bulk?pretty'</span><span class="pln"> </span><span class="pun">--</span><span class="pln">data</span><span class="pun">-</span><span class="pln">binary </span><span class="lit">@accounts</span><span class="pun">.</span><span class="pln">json
+curl </span><span class="str">'localhost:9200/_cat/indices?v'</span></pre></li>
   <li>If you want to import the JSON through java client, you can use the below code.<br>
   	<code>JSONParser parser = new JSONParser();
 		IndexResponse indexResponse = null;
